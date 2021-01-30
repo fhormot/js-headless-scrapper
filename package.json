@@ -1,0 +1,19 @@
+{
+  "name": "node-js-scrapper",
+  "version": "1.0.0",
+  "description": "A JS content scrapper using node.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "javascript",
+    "scrapper",
+    "render"
+  ],
+  "author": "Filip Hormot",
+  "license": "ISC",
+  "dependencies": {
+    "puppeteer": "^5.5.0"
+  }
+}
