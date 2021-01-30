@@ -1,34 +1,50 @@
 const puppeteer = require('puppeteer'); 
 
 const city = 'Tokyo';
-const duckUrl = `https://duckduckgo.com/?t=ffab&q=time+in+${city}&ia=time`;
+const duckUrl = `https://time.is/${city}`;//?lang=en`;
 
 let browser;
-let page;
+// let page;
 
 const main = async () => {
     // Open new page in headless browser 
     browser = await puppeteer.launch();
-    page = await browser.newPage();  
 }
 
 const getTime = async () => {
+    const page = await browser.newPage()
+    
+    await page.setExtraHTTPHeaders({
+        'Accept-Language': 'en'
+    });  
+
     // Visit a page in browser 
     await page.goto(`${duckUrl}`); 
 
-    const result = await page.evaluate( 
-        () => [...document.getElementsByClassName('time')].map(elem => elem.innerText) 
-    ); 
+    const result = await page.evaluate(() => {
+        return {
+            time:  document.getElementById('clock0_bg').innerText,
+            details: [...document.querySelectorAll("section > ul > li")].map(el => el.innerText)
+        }
+    }); 
+
+    page.close();
+
+    // console.log(result);
 
     const retVal = (result) 
-        ? { err: false, response: result[0] } 
+        ? { err: false, response: result } 
         : { err: true, response: {} };
 
     return retVal;
 }
 
 main().then(async () => {
-    console.log(await getTime());
+    // for (let index = 0; index < 10; index++) {
+        console.log(await getTime());
+        // await page.screenshot({path: 'screenshot.png'}); 
+    // }
+    process.exit(1);
 }).catch((err) => {
     console.error(err);
 });
